@@ -81,18 +81,6 @@ void f_b(B<int> *b) {
 }
 
 int main() {
-	A a(1);
-	B<int> b(2, 3);
-	std::cout << "sizeof(A)      = " << sizeof(A) << std::endl;
-	std::cout << "sizeof(B<int>) = " << sizeof(B<int>) << std::endl;
-	std::cout << "--------------------" << std::endl;
-	f_a(&a);
-	std::cout << "--------------------" << std::endl;
-	f_b(&b);
-	std::cout << "--------------------" << std::endl;
-	f_a(&b);
-	//-------------------------------------
-	std::cout << "\n\n" << std::endl;
 	A_Native a_native(1);
 	B_Native<int> b_native(2, 3);
 	std::cout << "sizeof(A_Native)      = " << sizeof(A_Native) << std::endl;
@@ -103,5 +91,17 @@ int main() {
 	f_b_native(&b_native);
 	std::cout << "--------------------" << std::endl;
 	f_a_native(&b_native);
+	//-------------------------------------
+	std::cout << "\n\n" << std::endl;
+	A a(1);
+	B<int> b(2, 3);
+	std::cout << "sizeof(A)      = " << sizeof(A) << std::endl;
+	std::cout << "sizeof(B<int>) = " << sizeof(B<int>) << std::endl;
+	std::cout << "--------------------" << std::endl;
+	f_a(&a);
+	std::cout << "--------------------" << std::endl;
+	f_b(&b);
+	std::cout << "--------------------" << std::endl;
+	f_a(&b);
 	return 0;
 }
