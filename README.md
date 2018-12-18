@@ -14,7 +14,7 @@ public:
 };
 
 // x86 : sizeof(A_Native) = 12
-// x64 : sizeof(A_Native) = 24
+// x64 : sizeof(A_Native) = 20 => 24(Alignment)
 class A_Native : public IA, public IB<void> {
 protected:
   int i;
@@ -26,7 +26,7 @@ public:
 };
 
 // x86 : sizeof(B_Native<int>) = 16
-// x64 : sizeof(B_Native<int>) = 32
+// x64 : sizeof(B_Native<int>) = 24 => 32(Alignment)
 template<typename T>
 class B_Native : public A_Native {
 protected:
@@ -38,8 +38,8 @@ public:
   void g() override;
 };
 
-// x86 : sizeof(A) = 8  // sizeof(A_Native) - sizeof(A) = 4
-// x64 : sizeof(A) = 16 // sizeof(A_Native) - sizeof(A) = 8
+// x86 : sizeof(A) = 8                   // sizeof(A_Native) - sizeof(A) = 4
+// x64 : sizeof(A) = 12 => 16(Alignment) // sizeof(A_Native) - sizeof(A) = 8
 class A {
   INTERFACES_BEGIN
     INTERFACE(IA)
@@ -50,8 +50,8 @@ public:
   inline A(int i) : i(i) {};
 };
 
-// x86 : sizeof(B<int>) = 12 // sizeof(B_Native<int>) - sizeof(B<int>) = 4
-// x64 : sizeof(B<int>) = 24 // sizeof(B_Native<int>) - sizeof(B<int>) = 8
+// x86 : sizeof(B<int>) = 12                  // sizeof(B_Native<int>) - sizeof(B<int>) = 4
+// x64 : sizeof(B<int>) = 16 => 24(Alignment) // sizeof(B_Native<int>) - sizeof(B<int>) = 8
 template<typename T>
 class B : public A {
   INTERFACES_BEGIN
