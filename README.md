@@ -1,5 +1,7 @@
 # Cpp-Interface-Example
 Reduce interface-implemented class size
+- Native syntax    : class size grow along with the amount of implemented interface
+- This repo syntax : +4 byte for x86 or +8byte for x64
 ```cpp
 class IA {
 public:
@@ -13,6 +15,7 @@ public:
 };
 
 // x86 : sizeof(A_Native) = 12
+// x64 : sizeof(A_Native) = 24
 class A_Native : public IA, public IB<void> {
 protected:
 	int i;
@@ -24,6 +27,7 @@ public:
 };
 
 // x86 : sizeof(B_Native<int>) = 16
+// x64 : sizeof(B_Native<int>) = 32
 template<typename T>
 class B_Native : public A_Native {
 protected:
@@ -35,7 +39,8 @@ public:
 	void g() override;
 };
 
-// x86 : sizeof(A_Native) = 8
+// x86 : sizeof(A) = 8  // sizeof(A_Native) - sizeof(A) = 4
+// x64 : sizeof(A) = 16 // sizeof(A_Native) - sizeof(A) = 8
 class A {
 	INTERFACES_BEGIN
 		INTERFACE(IA)
@@ -46,7 +51,8 @@ public:
 	inline A(int i) : i(i) {};
 };
 
-// x86 : sizeof(B_Native<int>) = 12
+// x86 : sizeof(B<int>) = 12 // sizeof(B_Native<int>) - sizeof(B<int>) = 4
+// x64 : sizeof(B<int>) = 24 // sizeof(B_Native<int>) - sizeof(B<int>) = 8
 template<typename T>
 class B : public A {
 	INTERFACES_BEGIN
