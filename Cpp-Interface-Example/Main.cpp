@@ -39,25 +39,25 @@ void f_b_native(B_Native<int> *b) {
 // ------------------------------------------------------------------------------------
 
 IMPLEMENT_BEGIN(IA, A)
-	void f() override {
+	void f() {
 		std::cout << "A(" << self->i << ")" << ".f()" << std::endl;
 	}
 IMPLEMENT_END(IA, A)
 
 IMPLEMENT_BEGIN(IB<void>, A)
-	void g() override {
+	void g() {
 		std::cout << "A(" << self->i << ")" << ".g()" << std::endl;
 	}
 IMPLEMENT_END(IB<void>, A)
 
 IMPLEMENT_BEGIN(IA, B<int>)
-	void f() override {
+	void f() {
 		std::cout << "B(" << self->i << ", " << self->j << ")" << ".f()" << std::endl;
 	}
 IMPLEMENT_END(IA, B<int>)
 
 IMPLEMENT_BEGIN(IB<void>, B<int>)
-	void g() override {
+	void g() {
 		std::cout << "B(" << self->i << ", " << self->j << ")" << ".g()" << std::endl;
 	}
 IMPLEMENT_END(IB<void>, B<int>)
