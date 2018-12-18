@@ -1,7 +1,6 @@
 # Cpp-Interface-Example
 Reduce interface-implemented class size
-- Native syntax    : class size grow along with the amount of implemented interface
-- This repo syntax : +4 byte for x86 or +8byte for x64
+- Native syntax : class size grow along with the amount of implemented interface
 ```cpp
 class IA {
 public:
