@@ -7,20 +7,33 @@ public:
 	virtual void f() = 0;
 };
 
+class IC {
+public:
+	virtual void h() = 0;
+};
+
 template<typename T>
 class IB {
 public:
 	virtual T g() = 0;
+	virtual Interface<IC> as_IC() = 0;
 };
 
-class A_Native : public IA, public IB<void> {
+template<typename T>
+class IB_Native : public IC {
+public:
+	virtual T g() = 0;
+};
+
+class A_Native : public IA, public IB_Native<void> {
 protected:
 	int i;
 public:
 	inline A_Native(int i) : i(i) {};
 
-	virtual void f();
-	virtual void g();
+	void f() override;
+	void g() override;
+	void h() override;
 };
 
 template<typename T>
@@ -32,12 +45,14 @@ public:
 
 	void f() override;
 	void g() override;
+	void h() override;
 };
 
 class A {
 	INTERFACES_BEGIN
 		INTERFACE(IA)
 		INTERFACE(IB<void>)
+		INTERFACE(IC)
 	INTERFACES_END
 	int i;
 public:
@@ -49,6 +64,7 @@ class B : public A {
 	INTERFACES_BEGIN
 		INTERFACE(IA)
 		INTERFACE(IB<void>)
+		INTERFACE(IC)
 	INTERFACES_END
 	T j;
 public:

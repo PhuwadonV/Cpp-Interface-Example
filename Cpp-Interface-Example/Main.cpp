@@ -9,6 +9,9 @@ void A_Native::g() {
 	std::cout << "A(" << i << ")" << ".g()" << std::endl;
 }
 
+void A_Native::h() {
+	std::cout << "A(" << i << ")" << ".h()" << std::endl;
+}
 
 void B_Native<int>::f() {
 	std::cout << "B(" << i << ", " << j << ")" << ".f()" << std::endl;
@@ -18,12 +21,21 @@ void B_Native<int>::g() {
 	std::cout << "B(" << i << ", " << j << ")" << ".g()" << std::endl;
 }
 
+void B_Native<int>::h() {
+	std::cout << "B(" << i << ", " << j << ")" << ".h()" << std::endl;
+}
+
 void f_ia_native(IA *ia) {
 	ia->f();
 }
 
-void f_ib_native(IB<void> *ib) {
+void f_ic(IC *ic) {
+	ic->h();
+}
+
+void f_ib_native(IB_Native<void> *ib) {
 	ib->g();
+	f_ic(ib);
 }
 
 void f_a_native(A_Native *a) {
@@ -44,9 +56,19 @@ IMPLEMENT_BEGIN(IA, A)
 	}
 IMPLEMENT_END(IA, A)
 
+IMPLEMENT_BEGIN(IC, A)
+void h() {
+	std::cout << "A(" << self->i << ")" << ".h()" << std::endl;
+}
+IMPLEMENT_END(IC, A)
+
 IMPLEMENT_BEGIN(IB<void>, A)
 	void g() {
 		std::cout << "A(" << self->i << ")" << ".g()" << std::endl;
+	}
+
+	Interface<IC> as_IC() {
+		return INTERFACE_CAST(IC, A, self);
 	}
 IMPLEMENT_END(IB<void>, A)
 
@@ -56,9 +78,19 @@ IMPLEMENT_BEGIN(IA, B<int>)
 	}
 IMPLEMENT_END(IA, B<int>)
 
+IMPLEMENT_BEGIN(IC, B<int>)
+void h() {
+	std::cout << "B(" << self->i << ", " << self->j << ")" << ".h()" << std::endl;
+}
+IMPLEMENT_END(IC, B<int>)
+
 IMPLEMENT_BEGIN(IB<void>, B<int>)
 	void g() {
 		std::cout << "B(" << self->i << ", " << self->j << ")" << ".g()" << std::endl;
+	}
+
+	Interface<IC> as_IC() {
+		return INTERFACE_CAST(IC, B<int>, self);
 	}
 IMPLEMENT_END(IB<void>, B<int>)
 
@@ -66,8 +98,13 @@ void f_ia(Interface<IA> ia) {
 	ia->f();
 }
 
+void f_ic(Interface<IC> ic) {
+	ic->h();
+}
+
 void f_ib(Interface<IB<void>> ib) {
 	ib->g();
+	f_ic(ib->as_IC());
 }
 
 void f_a(A *a) {

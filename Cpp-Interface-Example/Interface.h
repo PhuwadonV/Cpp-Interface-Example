@@ -4,6 +4,8 @@
 
 #define INTERFACE(t) virtual operator Interface<t>();
 
+#define INTERFACE_CAST(i, t, v) *reinterpret_cast<Interface<i>*>(&Implement<i, t>(v))
+
 #define INTERFACES_END										\
 	private:												\
 	template<typename, typename> friend class Implement;
@@ -14,11 +16,11 @@
 	public:													\
 		using ImplementBase::ImplementBase;
 
-#define IMPLEMENT_END(i, t)													\
-	};																		\
-																			\
-	t::operator Interface<i>() {											\
-		return *reinterpret_cast<Interface<i>*>(&Implement<i, t>(this));	\
+#define IMPLEMENT_END(i, t)					\
+	};										\
+											\
+	t::operator Interface<i>() {			\
+		return INTERFACE_CAST(i, t, this);	\
 	}
 
 template<typename I>
